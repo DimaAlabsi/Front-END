@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import Input from "./Input";
 import DatePickerComponent from "./DatePicker";
 import { errorAlert, successAlert } from "../../utils/alerts";
 import Image from "next/image";
 import taskImg from "../../public/task_bg.jpg";
 
-const TaskForm = ({ usersData }) => {
+const TaskForm = () => {
   const [formData, setFormData] = useState({
     title: "",
     subtitle: "",
@@ -18,9 +18,15 @@ const TaskForm = ({ usersData }) => {
   });
 
   const [errors, setErrors] = useState({});
-  const [users, setUsers] = useState(usersData);
+  const [users, setUsers] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then((response) => response.json())
+      .then((data) => setUsers(data))
+      .catch((error) => console.error('Error fetching users:', error));
+  }, []);
   const handleInputChange = (field, value) => {
     setFormData({
       ...formData,
